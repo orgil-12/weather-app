@@ -10,13 +10,13 @@ export default function Home() {
   return (
     <div className={`w-full h-screen flex `}>
       <div
-        className={`w-1/2 h-screen bg-[#F3F4F6]  flex flex-col-reverse items-center justify-between pb-[50px] `}
+        className={`w-1/2 h-screen bg-[#F3F4F6]  flex flex-col-reverse items-center justify-between pb-[90px] `}
       >
-        <Card value="day" temperature="26°" status="bright"/>
+        <Card value="day" temperature="26°" status="Bright"/>
         <SearchInput />
       </div>
-      <div className="w-1/2 h-screen bg-[url('/bg.png')] bg-no-repeat bg-cover bg-center flex flex-col-reverse items-center  justify-between pb-[50px] ">
-        <Card value="night" temperature="17°" status="clear"/>
+      <div className="w-1/2 h-screen bg-[url('/bg.png')] bg-no-repeat bg-cover bg-center flex flex-col-reverse items-center  justify-between pb-[90px] ">
+        <Card value="night" temperature="17°" status="Clear"/>
       </div>
     </div>
   );
