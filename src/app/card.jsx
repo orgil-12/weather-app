@@ -4,8 +4,18 @@ import { Home } from "@/componant/HomeSvg";
 import { Pin } from "@/componant/Pin";
 import { User } from "@/componant/User";
 import { Location } from "@/componant/location";
+import { useEffect, useState } from "react";
 
-export default function Card({ value, temperature, status }) {
+export default function Card({ value, cityName, temperature, condition }) {
+  const [dayStatus, setDayStatus] = useState("/daySun.png")
+  useEffect(() => {
+      if(condition === 'Sunny '){
+        setDayStatus("/daySun.png")
+      }else if(condition === 'Overcast '){
+        setDayStatus("/dayCloud.png")
+      }
+  },[cityName, temperature, condition])
+  
   const statusColor = value === "day" ? "text-[#FF8E27]" : "text-[#777CCE]";
   const gradient =
     value === "day"
@@ -17,7 +27,7 @@ export default function Card({ value, temperature, status }) {
     value === "night" ? "bg-[#111827BF]" : "bg-[#FFFFFFBF]";
   return (
     <div
-      className={`w-[414px] h-[832px] rounded-[48px] flex flex-col ${backgroundColor} z-10 backdrop-blur-[24px]`}
+      className={`w-[414px] h-[832px] rounded-[48px] flex flex-col ${backgroundColor} z-10 backdrop-blur-[10px]`}
     >
       <div
         className={`w-[398px] h-[504px] bg-white rounded-[42px] mt-[8px] ${color} flex flex-col mx-auto relative`}
@@ -27,10 +37,10 @@ export default function Card({ value, temperature, status }) {
         </div>
         <div className="mt-[56px] ml-[48px] ">
           <p className="text-[18px] text-[#9CA3AF]  ">September 10, 2021</p>
-          <h1 className="text-[48px] font-extrabold ">Krakow</h1>
+          <h1 className="text-[48px] font-extrabold w-[350px] h-[70px] ">{cityName}</h1>
         </div>
         <img
-          src="/nightCloud.png"
+          src = {dayStatus}
           className="w-[264.89px] h-[264.89px] mx-auto drop-shadow-[0_5px_25px_rgba(255,255,255,0.5)] mt-[24px] "
         />
       </div>
@@ -38,10 +48,10 @@ export default function Card({ value, temperature, status }) {
         <h1
           className={`text-[144px] font-extrabold text-transparent bg-clip-text ${gradient}`}
         >
-          {temperature}
+          {temperature}°
         </h1>
         <h2 className={`text-[24px] font-extrabold ${statusColor}`}>
-          {status}
+          {condition}
         </h2>
       </div>
       <div className="flex w-[318px] h-[32px] justify-between mx-auto mt-[50px] ">
