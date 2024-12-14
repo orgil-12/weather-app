@@ -17,12 +17,13 @@ export default function Home() {
   const [city, setCity] = useState('Ulaanbaatar')
   const [dayTemp, setDayTemp] = useState({
     temperature:0,
-    condition:"sunny"
+    condition:""
   });
   const [nightTemp, setNightTemp] = useState({
     temperature:0,
-    condition:"sunny"
+    condition:""
   });
+  const [date, setDate] = useState('');
 
   const onChangeText = (event) =>{
     setSearch(event.target.value)
@@ -31,6 +32,7 @@ export default function Home() {
   const onPressEnter = (e) => {
     if(e.code ==='Enter'){
       setCity(search)
+      setSearch("");
     }
   }
 
@@ -40,16 +42,18 @@ export default function Home() {
     )
       .then((response) => response.json())
       .then((data) => {
+        setDate(data?.forecast?.forecastday[0].date)
         setDayTemp({
           temperature: Math.floor(data?.forecast?.forecastday[0].day.maxtemp_c),
           condition: data?.forecast?.forecastday[0].day.condition?.text
         })
         setNightTemp({
           temperature: Math.floor(data?.forecast?.forecastday[0].day.mintemp_c),
-          condition: data?.forecast?.forecastday[0].day.condition?.text
+          condition: data?.forecast?.forecastday[0]?.hour[20]?.condition?.text  //Оройны цаг агаарыг 20 цагаас авч үзэв.
         })
       }); 
   }, [city]);
+  console.log(dayTemp.condition)
 
   return (
     <div
@@ -58,7 +62,7 @@ export default function Home() {
       <div
         className={`w-1/2 h-screen bg-[#F3F4F6]  flex flex-col-reverse relative items-center justify-between pb-[90px]`}
       >
-        <Card value="day" cityName={city} temperature={dayTemp.temperature} condition={dayTemp.condition} />
+        <Card value="day" cityName={city} temperature={dayTemp.temperature} condition={dayTemp.condition.trim()} date={date} />
         <SearchInput search={search} onChangeText={onChangeText} onPressEnter={onPressEnter} />
         <img
           src="/ellipseYellow.png"
@@ -66,7 +70,7 @@ export default function Home() {
         />
       </div>
       <div className="w-1/2 h-screen bg-[url('/bg.png')] bg-no-repeat bg-cover bg-center flex flex-col-reverse items-center relative justify-between pb-[90px]  ">
-        <Card value="night" cityName={city} temperature={nightTemp.temperature} condition={nightTemp.condition} />
+        <Card value="night" cityName={city} temperature={nightTemp.temperature} condition={nightTemp.condition.trim()} date={date} />
         <div className="absolute -left-[50px] top-[525px] flex gap-3 ">
           <LogoLeft />
           <LogoRigth />

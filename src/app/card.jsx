@@ -6,14 +6,43 @@ import { User } from "@/componant/User";
 import { Location } from "@/componant/location";
 import { useEffect, useState } from "react";
 
-export default function Card({ value, cityName, temperature, condition }) {
+export default function Card({ value, cityName, temperature, condition,date }) {
   const [dayStatus, setDayStatus] = useState("/daySun.png")
+  const [nightStatus, setNightStatus] = useState("/nightMoon.png")
+  const weatherStatus = value==="day" ? dayStatus : nightStatus;
+  
   useEffect(() => {
-      if(condition === 'Sunny '){
+    if(value==="day"){
+      if(condition.includes("Sunny")){
         setDayStatus("/daySun.png")
-      }else if(condition === 'Overcast '){
+      }else if(condition.includes("Overcast")){
         setDayStatus("/dayCloud.png")
+      }else if(condition.includes("snow")){
+        setDayStatus("/daySnow.png")
+      }else if(condition.includes("rain")){
+        setDayStatus("/dayRain.png")
+      }else if(condition.includes("thunder")){
+        setDayStatus("/dayThunder.png")
+      }else if(condition.includes("wind")){
+        setDayStatus("/dayWind.png")
       }
+    }else{
+      if(condition.includes("Clear")){
+        setNightStatus("/nightMoon.png")
+      }else if(condition.includes("Overcast")){
+        setNightStatus("/nightCloud.png")
+      }else if(condition.includes("snow")){
+        setNightStatus("/nightSnow.png")
+      }else if(condition.includes("rain")){
+        setNightStatus("/nightRain.png")
+      }else if(condition.includes("thunder")){
+        setNightStatus("/nightThunder.png")
+      }else if(condition.includes("wind")){
+        setNightStatus("/nightWind.png")
+      }else if(condition.includes("Cloudy")){
+        setNightStatus("/nightCloud.png")
+      }
+    }
   },[cityName, temperature, condition])
   
   const statusColor = value === "day" ? "text-[#FF8E27]" : "text-[#777CCE]";
@@ -36,11 +65,11 @@ export default function Card({ value, cityName, temperature, condition }) {
           <Location />
         </div>
         <div className="mt-[56px] ml-[48px] ">
-          <p className="text-[18px] text-[#9CA3AF]  ">September 10, 2021</p>
+          <p className="text-[18px] text-[#9CA3AF]  ">{date}</p>
           <h1 className="text-[48px] font-extrabold w-[350px] h-[70px] ">{cityName}</h1>
         </div>
         <img
-          src = {dayStatus}
+          src = {weatherStatus}
           className="w-[264.89px] h-[264.89px] mx-auto drop-shadow-[0_5px_25px_rgba(255,255,255,0.5)] mt-[24px] "
         />
       </div>
