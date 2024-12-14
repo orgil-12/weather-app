@@ -25,6 +25,10 @@ export default function Card({ value, cityName, temperature, condition,date }) {
         setDayStatus("/dayThunder.png")
       }else if(condition.includes("wind")){
         setDayStatus("/dayWind.png")
+      }else if(condition.includes("Mist")){
+        setDayStatus("/dayCloud.png")
+      }else if(condition.includes("Cloudy")){
+        setDayStatus("/dayCloud.png")
       }
     }else{
       if(condition.includes("Clear")){
@@ -66,7 +70,7 @@ export default function Card({ value, cityName, temperature, condition,date }) {
         </div>
         <div className="mt-[56px] ml-[48px] ">
           <p className="text-[18px] text-[#9CA3AF]  ">{date}</p>
-          <h1 className="text-[48px] font-extrabold w-[350px] h-[70px] ">{cityName}</h1>
+          <h1 className="text-[48px] capitalize font-extrabold w-[350px] h-[70px] ">{cityName}</h1>
         </div>
         <img
           src = {weatherStatus}

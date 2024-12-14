@@ -9,51 +9,62 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
-const API_KEY = "b873d619539745a787172637241312"
-
+const API_KEY = "b873d619539745a787172637241312";
 
 export default function Home() {
-  const [search, setSearch] = useState('')
-  const [city, setCity] = useState('Ulaanbaatar')
+  const [search, setSearch] = useState("");
+  const [city, setCity] = useState("Ulaanbaatar");
+  const [citys, setCitys] = useState([]);
   const [dayTemp, setDayTemp] = useState({
-    temperature:0,
-    condition:""
+    temperature: 0,
+    condition: "",
   });
   const [nightTemp, setNightTemp] = useState({
-    temperature:0,
-    condition:""
+    temperature: 0,
+    condition: "",
   });
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
 
-  const onChangeText = (event) =>{
-    setSearch(event.target.value)
-  }
+  const onChangeText = (event) => {
+    setSearch(event.target.value);
+  };
 
   const onPressEnter = (e) => {
-    if(e.code ==='Enter'){
-      setCity(search)
+    if (e.code === "Enter") {
+      setCity(search);
       setSearch("");
     }
-  }
+  };
 
   useEffect( () => {
-       fetch(
+     fetch(
+      `https://countriesnow.space/api/v0.1/countries`
+    )
+      .then((response) => response.json())
+      .then(
+        (data) => {
+          setCitys(data.data.flatMap(country => country.cities));
+        },
+      );
+  },[]);
+
+  useEffect(() => {
+    fetch(
       `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=1&aqi=no&alerts=no`
     )
       .then((response) => response.json())
       .then((data) => {
-        setDate(data?.forecast?.forecastday[0].date)
+        setDate(data?.forecast?.forecastday[0].date);
         setDayTemp({
           temperature: Math.floor(data?.forecast?.forecastday[0].day.maxtemp_c),
-          condition: data?.forecast?.forecastday[0].day.condition?.text
-        })
+          condition: data?.forecast?.forecastday[0].day.condition?.text.trim(),
+        });
         setNightTemp({
           temperature: Math.floor(data?.forecast?.forecastday[0].day.mintemp_c),
-          condition: data?.forecast?.forecastday[0]?.hour[20]?.condition?.text  //Оройны цаг агаарыг 20 цагаас авч үзэв.
-        })
-      }); 
+          condition: data?.forecast?.forecastday[0]?.hour[20]?.condition?.text, //Оройны цаг агаарыг 20 цагаас авч үзэв.
+        });
+      });
   }, [city]);
-  console.log(dayTemp.condition)
 
   return (
     <div
@@ -62,15 +73,31 @@ export default function Home() {
       <div
         className={`w-1/2 h-screen bg-[#F3F4F6]  flex flex-col-reverse relative items-center justify-between pb-[90px]`}
       >
-        <Card value="day" cityName={city} temperature={dayTemp.temperature} condition={dayTemp.condition.trim()} date={date} />
-        <SearchInput search={search} onChangeText={onChangeText} onPressEnter={onPressEnter} />
+        <Card
+          value="day"
+          cityName={city}
+          temperature={dayTemp.temperature}
+          condition={dayTemp.condition.trim()}
+          date={date}
+        />
+        <SearchInput
+          search={search}
+          onChangeText={onChangeText}
+          onPressEnter={onPressEnter}
+        />
         <img
           src="/ellipseYellow.png"
           className="size-[128px] absolute top-[170px] left-[300px] z-[1]"
         />
       </div>
       <div className="w-1/2 h-screen bg-[url('/bg.png')] bg-no-repeat bg-cover bg-center flex flex-col-reverse items-center relative justify-between pb-[90px]  ">
-        <Card value="night" cityName={city} temperature={nightTemp.temperature} condition={nightTemp.condition.trim()} date={date} />
+        <Card
+          value="night"
+          cityName={city}
+          temperature={nightTemp.temperature}
+          condition={nightTemp.condition.trim()}
+          date={date}
+        />
         <div className="absolute -left-[50px] top-[525px] flex gap-3 ">
           <LogoLeft />
           <LogoRigth />
@@ -99,9 +126,9 @@ export default function Home() {
   );
 }
 
-const SearchInput = ({search, onChangeText, onPressEnter}) => {
+const SearchInput = ({ search, onChangeText, onPressEnter }) => {
   return (
-    <div className="mt-10 ml-10 w-[567px] h-[80px] rounded-[48px] px-6 py-4 flex bg-white items-center z-10 ">
+    <div className="mt-10 ml-10 w-[567px] h-[80px] rounded-[48px] px-6 py-4 flex bg-white items-center z-10 relative">
       <SearchIcon />
       <input
         type="text"
@@ -111,6 +138,11 @@ const SearchInput = ({search, onChangeText, onPressEnter}) => {
         onChange={onChangeText}
         onKeyDown={onPressEnter}
       />
+      {search && (
+        <div
+          className={`w-[500px] h-[100px] bg-white absolute top-[100px] opacity-[0.9] rounded-3xl`}
+        ></div>
+      )}
     </div>
   );
 };
