@@ -5,6 +5,7 @@ import { SearchIcon } from "../componant/SearchIcon";
 import { Manrope } from "next/font/google";
 import { LogoLeft, LogoRigth } from "@/componant/pineconeLogo";
 import { useEffect, useState } from "react";
+import { Pin } from "@/componant/Pin";
 const manrope = Manrope({
   subsets: ["latin"],
 });
@@ -14,7 +15,16 @@ const API_KEY = "b873d619539745a787172637241312";
 export default function Home() {
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("Ulaanbaatar");
-  const [citys, setCitys] = useState([]);
+  const citiesData = [
+    "NEW YORK",
+    "LONDON",
+    "ULAANBAATAR",
+    "WASHINGTON",
+    "MOSKVA",
+    "ULAANGOM",
+    "CHICAGO",
+    "SAN FRANCISCO",
+  ];
   const [dayTemp, setDayTemp] = useState({
     temperature: 0,
     condition: "",
@@ -36,17 +46,18 @@ export default function Home() {
     }
   };
 
-  useEffect( () => {
-     fetch(
-      `https://countriesnow.space/api/v0.1/countries`
-    )
-      .then((response) => response.json())
-      .then(
-        (data) => {
-          setCitys(data.data.flatMap(country => country.cities));
-        },
-      );
-  },[]);
+  // useEffect(() => {
+  //   fetch(
+  //     `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records?limit=277`
+  //   )
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setCitiesData(
+  //         data?.results?.flatMap((result) => result?.alternate_names || [])
+  //       );
+  //     });
+  // }, []);
 
   useEffect(() => {
     fetch(
@@ -82,8 +93,10 @@ export default function Home() {
         />
         <SearchInput
           search={search}
+          setSearch={setSearch}
           onChangeText={onChangeText}
           onPressEnter={onPressEnter}
+          data={citiesData}
         />
         <img
           src="/ellipseYellow.png"
@@ -126,9 +139,20 @@ export default function Home() {
   );
 }
 
-const SearchInput = ({ search, onChangeText, onPressEnter }) => {
+const SearchInput = ({
+  search,
+  setSearch,
+  onChangeText,
+  onPressEnter,
+  data,
+}) => {
+  const suggest = data?.filter((citiesName) =>
+    citiesName?.includes(search.toUpperCase())
+  );
+  console.log(search);
+  console.log(suggest);
   return (
-    <div className="mt-10 ml-10 w-[567px] h-[80px] rounded-[48px] px-6 py-4 flex bg-white items-center z-10 relative">
+    <div className="m-10 ml-10 w-[567px] h-[80px] rounded-[48px] px-6 py-4 flex bg-white items-center z-10 relative">
       <SearchIcon />
       <input
         type="text"
@@ -137,11 +161,25 @@ const SearchInput = ({ search, onChangeText, onPressEnter }) => {
         value={search}
         onChange={onChangeText}
         onKeyDown={onPressEnter}
+        autoFocus
       />
       {search && (
         <div
-          className={`w-[500px] h-[100px] bg-white absolute top-[100px] opacity-[0.9] rounded-3xl`}
-        ></div>
+          className={`w-[500px] h-[100px] bg-white absolute top-[100px] opacity-[0.9] rounded-3xl overflow-y-scroll p-[20px] `}
+        >
+          {suggest.map((filteredCitiesName, index) => {
+            return (
+              <div
+                className="text-black text-[20px] flex items-center gap-3 "
+                key={index}
+                onClick={() => setSearch(filteredCitiesName)}
+              >
+                <Pin />
+                {filteredCitiesName}
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

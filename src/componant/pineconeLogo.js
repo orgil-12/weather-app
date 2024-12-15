@@ -1,8 +1,8 @@
 const LogoLeft = () => {
   return (
     <svg
-      width="43"
-      height="86"
+      width="5vh"
+      height="10vh"
       viewBox="0 0 43 86"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -18,8 +18,8 @@ const LogoLeft = () => {
 const LogoRigth = () => {
   return (
     <svg
-      width="44"
-      height="86"
+      width="5.2vh"
+      height="10vh"
       viewBox="0 0 44 86"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
