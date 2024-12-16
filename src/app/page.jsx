@@ -10,21 +10,49 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
+const citiesData = [
+  "ULAANBAATAR",
+  "ULAANGOM",
+  "MOSKVA",
+  "NEW YORK",
+  "LONDON",
+  "WASHINGTON",
+  "CHICAGO",
+  "SAN FRANCISCO",
+  "BERLIN",
+  "ROMA",
+  "PARIS",
+  "TORONTO",
+  "VANCOUVER",
+  "MADRID",
+  "AMSTERDAM",
+  "BRUSSELS",
+  "MILAN",
+  "LISBON",
+  "DUBLIN",
+  "ZURICH",
+  "BOSTON",
+  "LOS ANGELES",
+  "SEATTLE",
+  "PHILADELPHIA",
+  "ATLANTA",
+  "BIRMINGHAM",
+  "MUNICH",
+  "VIENNA",
+  "PRAGUE",
+  "COPENHAGEN",
+  "STOCKHOLM",
+  "OSLO",
+  "HAMBURG",
+  "GENEVA",
+];
+
 const API_KEY = "b873d619539745a787172637241312";
 
 export default function Home() {
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("Ulaanbaatar");
-  const citiesData = [
-    "NEW YORK",
-    "LONDON",
-    "ULAANBAATAR",
-    "WASHINGTON",
-    "MOSKVA",
-    "ULAANGOM",
-    "CHICAGO",
-    "SAN FRANCISCO",
-  ];
+
   const [dayTemp, setDayTemp] = useState({
     temperature: 0,
     condition: "",
@@ -102,7 +130,6 @@ export default function Home() {
           setSearch={setSearch}
           onChangeText={onChangeText}
           onPressEnter={onPressEnter}
-          data={citiesData}
           onPressClick={onPressClick}
         />
         <img
@@ -148,13 +175,11 @@ export default function Home() {
 
 const SearchInput = ({
   search,
-  setSearch,
   onChangeText,
   onPressEnter,
   onPressClick,
-  data,
 }) => {
-  const suggest = data?.filter((citiesName) =>
+  const suggest = citiesData?.filter((citiesName) =>
     citiesName?.includes(search.toUpperCase())
   );
   console.log(suggest)
