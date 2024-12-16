@@ -118,7 +118,7 @@ export default function Home() {
           condition={nightTemp.condition.trim()}
           date={date}
         />
-        <div className="absolute -left-[50px] top-[525px] flex gap-3 ">
+        <div className="absolute -left-[60px] top-[510px] flex gap-3 ">
           <LogoLeft />
           <LogoRigth />
         </div>
