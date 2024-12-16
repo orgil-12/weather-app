@@ -40,11 +40,17 @@ export default function Home() {
   };
 
   const onPressEnter = (e) => {
+    console.log(e)
     if (e.code === "Enter") {
       setCity(search);
       setSearch("");
     }
   };
+
+  const onPressClick = (filteredCitiesName) => {
+      setCity(filteredCitiesName);
+      setSearch("");
+  }
 
   // useEffect(() => {
   //   fetch(
@@ -67,11 +73,11 @@ export default function Home() {
       .then((data) => {
         setDate(data?.forecast?.forecastday[0].date);
         setDayTemp({
-          temperature: Math.floor(data?.forecast?.forecastday[0].day.maxtemp_c),
+          temperature: Math.round(data?.forecast?.forecastday[0].day.maxtemp_c),
           condition: data?.forecast?.forecastday[0].day.condition?.text.trim(),
         });
         setNightTemp({
-          temperature: Math.floor(data?.forecast?.forecastday[0].day.mintemp_c),
+          temperature: Math.round(data?.forecast?.forecastday[0].day.mintemp_c),
           condition: data?.forecast?.forecastday[0]?.hour[20]?.condition?.text, //Оройны цаг агаарыг 20 цагаас авч үзэв.
         });
       });
@@ -97,6 +103,7 @@ export default function Home() {
           onChangeText={onChangeText}
           onPressEnter={onPressEnter}
           data={citiesData}
+          onPressClick={onPressClick}
         />
         <img
           src="/ellipseYellow.png"
@@ -144,15 +151,15 @@ const SearchInput = ({
   setSearch,
   onChangeText,
   onPressEnter,
+  onPressClick,
   data,
 }) => {
   const suggest = data?.filter((citiesName) =>
     citiesName?.includes(search.toUpperCase())
   );
-  console.log(search);
-  console.log(suggest);
+  console.log(suggest)
   return (
-    <div className="m-10 ml-10 w-[567px] h-[80px] rounded-[48px] px-6 py-4 flex bg-white items-center z-10 relative">
+    <div className="m-10 ml-10 w-[567px] h-[80px] rounded-[48px] px-6 py-4 flex bg-white items-center z-50 relative">
       <SearchIcon />
       <input
         type="text"
@@ -161,18 +168,17 @@ const SearchInput = ({
         value={search}
         onChange={onChangeText}
         onKeyDown={onPressEnter}
-        autoFocus
       />
       {search && (
         <div
-          className={`w-[500px] h-[100px] bg-white absolute top-[100px] opacity-[0.9] rounded-3xl overflow-y-scroll p-[20px] `}
+          className={`w-[500px] max-h-[150px] bg-white absolute top-[100px] opacity-[0.9] rounded-3xl overflow-y-scroll px-[20px] py-2`}
         >
           {suggest.map((filteredCitiesName, index) => {
             return (
               <div
                 className="text-black text-[20px] flex items-center gap-3 "
                 key={index}
-                onClick={() => setSearch(filteredCitiesName)}
+                onClick={() => onPressClick(filteredCitiesName)}
               >
                 <Pin />
                 {filteredCitiesName}

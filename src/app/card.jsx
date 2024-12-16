@@ -76,7 +76,7 @@ export default function Card({
         </div>
         <div className="mt-[56px] ml-[48px] ">
           <p className="text-[18px] text-[#9CA3AF]  ">{date}</p>
-          <h1 className="text-[48px] capitalize font-extrabold w-[350px] h-[70px] ">
+          <h1 className="text-[40px] capitalize font-extrabold w-[350px] h-[70px] ">
             {cityName}
           </h1>
         </div>
